@@ -1,0 +1,149 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Country Videos API",
+        "description": "API to fetch YouTube videos and Wikipedia data for countries",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/country-videos": {
+            "get": {
+                "tags": [
+                    "Countries"
+                ],
+                "summary": "Get country videos and info",
+                "operationId": "8838fcb488f085d5d2a5edf751e8326b",
+                "parameters": [
+                    {
+                        "name": "countries[]",
+                        "in": "query",
+                        "description": "List of country codes to fetch data for",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "enum": [
+                                    "GB",
+                                    "NL",
+                                    "DE",
+                                    "FR",
+                                    "ES",
+                                    "IT",
+                                    "GR"
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1,
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "description": "Number of records to skip",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 0,
+                            "minimum": 0
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "country_code": {
+                                                        "type": "string",
+                                                        "example": "GB"
+                                                    },
+                                                    "youtube": {
+                                                        "properties": {
+                                                            "description": {
+                                                                "type": "string"
+                                                            },
+                                                            "thumbnails": {
+                                                                "properties": {
+                                                                    "sd": {
+                                                                        "type": "string",
+                                                                        "format": "uri"
+                                                                    },
+                                                                    "hd": {
+                                                                        "type": "string",
+                                                                        "format": "uri"
+                                                                    }
+                                                                },
+                                                                "type": "object"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    },
+                                                    "wikipedia": {
+                                                        "properties": {
+                                                            "title": {
+                                                                "type": "string"
+                                                            },
+                                                            "extract": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "meta": {
+                                            "properties": {
+                                                "total": {
+                                                    "type": "integer",
+                                                    "example": 7
+                                                },
+                                                "page": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "per_page": {
+                                                    "type": "integer",
+                                                    "example": 10
+                                                },
+                                                "total_pages": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Countries",
+            "description": "Countries"
+        }
+    ]
+}

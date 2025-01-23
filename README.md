@@ -1,6 +1,6 @@
 # Bravoure Backend Challenge
 
-This is a RESTful API that combines YouTube and Wikipedia data for European countries. All one needs is docker to run this locally.
+RESTful API combining YouTube trending videos and Wikipedia data for European countries.
 
 ## Setup
 
@@ -14,13 +14,20 @@ docker-compose exec app composer install
 docker-compose exec app php artisan key:generate
 docker-compose exec app php artisan migrate
 docker-compose exec app php artisan telescope:install
+docker-compose exec app php artisan l5-swagger:generate
+```
 
+## API Documentation
+
+-   OpenAPI/Swagger UI: `/api/documentation`
+-   Telescope Debugging: `/telescope`
 
 ## Endpoints
-GET /api/country-videos - Returns YouTube trending videos and Wikipedia data for specified European countries.
 
-### Query parameters:
-countries (optional): Array of country codes (default: GB, NL, DE, FR, ES, IT, GR)
+`GET /api/country-videos`
 
-Debug
-Access Laravel Telescope at /telescope for debugging API requests and responses.
+Query parameters:
+
+-   `countries[]`: Country codes (default: GB, NL, DE, FR, ES, IT, GR)
+-   `page`: Page number for pagination
+-   `per_page`: Results per page

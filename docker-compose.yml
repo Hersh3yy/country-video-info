@@ -1,0 +1,39 @@
+# docker-compose.yml
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bravoure_app
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+    networks:
+      - bravoure
+
+  nginx:
+    image: nginx:alpine
+    container_name: bravoure_nginx
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx:/etc/nginx/conf.d/
+    networks:
+      - bravoure
+
+  redis:
+    image: redis:alpine
+    container_name: bravoure_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - bravoure
+
+networks:
+  bravoure:
+    driver: bridge

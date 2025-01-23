@@ -16,7 +16,7 @@ class YouTubeService
     public function getMostPopularByCountry(string $countryCode): ?array
     {
         $countryCode = strtoupper($countryCode);
-        
+
         // Validate country code
         if (!in_array($countryCode, self::COUNTRIES)) {
             return null;
@@ -24,7 +24,7 @@ class YouTubeService
 
         // Check cache first
         return Cache::remember(
-            "youtube_popular_{$countryCode}", 
+            "youtube_popular_{$countryCode}",
             self::CACHE_TTL,
             function () use ($countryCode) {
                 // Basic rate limiting
@@ -39,6 +39,11 @@ class YouTubeService
                         'key' => config('services.google.youtube_api_key')
                     ]);
 
+                    Log::info('YouTube API Response', [
+                        'status' => $response->status(),
+                        'data' => $response->json()
+                    ]);
+
                     if (!$response->successful()) {
                         Log::error('YouTube API error', [
                             'country' => $countryCode,
@@ -49,14 +54,22 @@ class YouTubeService
                     }
 
                     $video = $response->json()['items'][0] ?? null;
+
+                    Log::info('Video data', ['video' => $video]);
+
                     if (!$video) return null;
 
-                    // Return only required fields
+                    // Update return structure to match expected format
                     return [
-                        'description' => $video['snippet']['description'],
+                        'description' => $video['snippet']['description'] ?? null,
                         'thumbnails' => [
-                            'normal' => $video['snippet']['thumbnails']['medium'] ?? null,
-                            'high' => $video['snippet']['thumbnails']['high'] ?? null
+                            'sd' => str_replace('\/', '/', $video['snippet']['thumbnails']['standard']['url']
+                                ?? $video['snippet']['thumbnails']['high']['url']
+                                ?? $video['snippet']['thumbnails']['medium']['url']
+                                ?? null),
+                            'hd' => str_replace('\/', '/', $video['snippet']['thumbnails']['maxres']['url']
+                                ?? $video['snippet']['thumbnails']['high']['url']
+                                ?? null)
                         ]
                     ];
                 } catch (\Exception $e) {

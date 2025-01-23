@@ -29,6 +29,10 @@ class TestServicesCommand extends Command
 
         $this->info("\nCache keys:");
         $this->displayCacheKeys();
+
+        // Test Redis connection
+        Cache::put('test_key', 'test_value', 60); // Store a value for 60 seconds
+        $value = Cache::get('test_key'); // Retrieve the value
     }
 
     private function testAllCountries($youtube, $wiki): void

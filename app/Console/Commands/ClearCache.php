@@ -11,20 +11,21 @@ class ClearCache extends Command
      *
      * @var string
      */
-    protected $signature = 'app:clear-cache';
+    protected $signature = 'cache:clear-all';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Command to clear the cache.';
 
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        //
+        Cache::flush();
+        $this->info('Cache cleared successfully');
     }
 }

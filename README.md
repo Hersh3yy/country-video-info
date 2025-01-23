@@ -11,6 +11,7 @@ This is a RESTful API that combines YouTube and Wikipedia data for European coun
 ```bash
 docker-compose up -d
 docker-compose exec app composer install
+docker-compose exec app php artisan key:generate
 docker-compose exec app php artisan migrate
 docker-compose exec app php artisan telescope:install
 
